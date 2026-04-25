@@ -8,92 +8,16 @@ Because Javelin evaluates modern GitHub projects alongside historical Apache pro
 
 ## 1. Automated Installation (Recommended)
 
-To completely automate the setup of SDKMAN, the required Java versions, and the Defects4J framework, use the provided installation script.
+To completely automate the setup of SDKMAN, the required Java versions, and the Defects4J framework, use the installation script included in this repository.
 
-Step 1: Create the script file in your terminal:
-    nano install_defects4j.sh
+Step 1: Clone this repository to your WSL Ubuntu environment
+    git clone https://github.com/FCValentino/javelin-d4j-setup.git
+    cd javelin-d4j-setup
 
-Step 2: Paste the following code into the file:
-
-    #!/bin/bash
-    set -e
-    
-    echo "========================================================"
-    echo "🎯 Javelin: Automated Defects4J Environment Installer"
-    echo "========================================================"
-    
-    USER_HOME=$HOME
-    echo "📁 Detected Ubuntu Home Directory: $USER_HOME"
-    echo ""
-    
-    echo "🛠️ Java Environment Setup"
-    echo "INFO: Defects4J strictly requires Java 11 for its framework, and Java 8 to compile older bugs."
-    echo "Since GitBug-Java requires modern Java (e.g., Java 21), we highly recommend using SDKMAN."
-    echo ""
-    read -p "Do you want to install and use SDKMAN for Java management? (y/n): " use_sdkman
-    
-    if [[ "$use_sdkman" =~ ^[Yy]$ ]]; then
-        echo "Installing base dependencies for SDKMAN..."
-        sudo apt-get update -y && sudo apt-get install -y zip unzip curl python3-pip
-    
-        if [ ! -d "$USER_HOME/.sdkman" ]; then
-            echo "Downloading SDKMAN..."
-            curl -s "https://get.sdkman.io" | bash
-        fi
-    
-        export SDKMAN_DIR="$USER_HOME/.sdkman"
-        [[ -s "$USER_HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$USER_HOME/.sdkman/bin/sdkman-init.sh"
-    
-        echo "Checking and installing required Java versions via SDKMAN..."
-        sdk install java 11.0.22-tem || true
-        sdk install java 8.0.402-tem || true
-        sdk install java 21.0.2-tem || true
-    
-        echo "Setting default Java to 11 for the Defects4J installation..."
-        sdk default java 11.0.22-tem
-        sdk use java 11.0.22-tem
-    else
-        echo "⚠️ Skipping SDKMAN. Checking system Java..."
-        # Add basic java check logic here if SDKMAN is skipped
-    fi
-    
-    echo ""
-    echo "📦 Installing underlying Linux Dependencies for Defects4J..."
-    sudo apt-get update -y
-    sudo apt-get install -y git subversion perl curl cpanminus make gcc
-    
-    echo ""
-    echo "⚙️ Cloning Defects4J framework..."
-    if [ ! -d "$USER_HOME/defects4j" ]; then
-        cd "$USER_HOME"
-        git clone https://github.com/rjust/defects4j.git
-    fi
-    cd "$USER_HOME/defects4j"
-    
-    echo ""
-    echo "🐪 Configuring Perl Modules safely in user space..."
-    cpanm --local-lib="$USER_HOME/perl5" local::lib && eval $(perl -I "$USER_HOME/perl5/lib/perl5/" -Mlocal::lib)
-    if ! grep -q "perl5/lib/perl5" "$USER_HOME/.bashrc"; then
-        echo 'eval $(perl -I ~/perl5/lib/perl5/ -Mlocal::lib)' >> "$USER_HOME/.bashrc"
-    fi
-    cpanm --installdeps .
-    
-    echo ""
-    echo "📥 Initializing Defects4J Bug Databases..."
-    ./init.sh
-    
-    echo ""
-    echo "🔗 Adding Defects4J to your system PATH..."
-    if ! grep -q "defects4j/framework/bin" "$USER_HOME/.bashrc"; then
-        echo 'export PATH=$PATH:"$HOME/defects4j/framework/bin"' >> "$USER_HOME/.bashrc"
-    fi
-    export PATH=$PATH:"$USER_HOME/defects4j/framework/bin"
-    
-    echo ""
-    echo "✅ Defects4J Installation Complete! Please run 'source ~/.bashrc'"
-
-Step 3: Make it executable and run it:
+Step 2: Make the script executable
     chmod +x install_defects4j.sh
+
+Step 3: Run the installer
     ./install_defects4j.sh
 
 ---
