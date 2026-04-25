@@ -10,14 +10,14 @@ Because Javelin evaluates modern GitHub projects alongside historical Apache pro
 
 To completely automate the setup of SDKMAN, the required Java versions, and the Defects4J framework, use the installation script included in this repository.
 
-Step 1: Clone this repository to your WSL Ubuntu environment
+### Step 1: Clone this repository to your WSL Ubuntu environment
     git clone https://github.com/FCValentino/javelin-d4j-setup.git
     cd javelin-d4j-setup
 
-Step 2: Make the script executable
+### Step 2: Make the script executable
     chmod +x install_defects4j.sh
 
-Step 3: Run the installer
+### Step 3: Run the installer
     ./install_defects4j.sh
 
 ---
@@ -57,10 +57,12 @@ This repository includes an interactive Python script (extract_d4j.py) designed 
 
 ### Script Prerequisites
 The script requires a global installation of the questionary library to render the interactive terminal UI.
+
     pip3 install questionary --break-system-packages
 
 ### Running the Extractor
 Run the script from anywhere in your terminal:
+
     python3 extract_d4j.py
 
 1. Select a Project: Use your arrow keys to select a classic or modern benchmark project (e.g., Lang, Math, Closure).
@@ -72,9 +74,10 @@ Run the script from anywhere in your terminal:
 ## 4. Post-Extraction Compilation
 
 Once extracted, navigate to the buggy folder and compile using the Defects4J wrapper. 
-
+### Compilation
 (Ensure you are using Java 11 or Java 8 depending on the project's age!)
-    cd ~/javelin-workspaces/Defects4J-Lang-1-buggy
+
+    cd ~/javelin-workspaces/Defects4J-Lang-1-buggy (Only Example Project)
     defects4j compile
     defects4j test
 
