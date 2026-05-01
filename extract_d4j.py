@@ -12,7 +12,8 @@ def install_dependencies():
             __import__(package)
         except ImportError:
             print(f"📦 Installing missing package: {package}...")
-            subprocess.check_call([sys.executable, "-m", "pip", "install", package, "--quiet"])
+            # Added --break-system-packages to bypass modern Linux PEP 668 restrictions
+            subprocess.check_call([sys.executable, "-m", "pip", "install", package, "--break-system-packages", "--quiet"])
             
     print("✅ All dependencies are installed and ready!\n")
 
@@ -56,7 +57,7 @@ def main():
     workspace_dir = os.path.expanduser("~/javelin-workspaces")
     os.makedirs(workspace_dir, exist_ok=True)
 
-    # 1. UI: Select a Project (All 17 Projects Retained)
+    # 1. UI: Select a Project
     projects = {
         "Chart (JFreeChart)": "Chart",
         "Cli (Apache Commons CLI)": "Cli",
