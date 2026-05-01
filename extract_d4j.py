@@ -1,6 +1,24 @@
 import os
 import subprocess
 import sys
+
+def install_dependencies():
+    """Checks for and automatically installs missing required libraries."""
+    required_packages = ["pandas", "scipy", "tqdm", "unidiff", "openpyxl", "questionary"]
+    print("🔍 Checking system dependencies...")
+    
+    for package in required_packages:
+        try:
+            __import__(package)
+        except ImportError:
+            print(f"📦 Installing missing package: {package}...")
+            subprocess.check_call([sys.executable, "-m", "pip", "install", package, "--quiet"])
+            
+    print("✅ All dependencies are installed and ready!\n")
+
+# Run dependency check BEFORE importing third-party libraries
+install_dependencies()
+
 import questionary
 
 def run_command(cmd):
@@ -38,7 +56,7 @@ def main():
     workspace_dir = os.path.expanduser("~/javelin-workspaces")
     os.makedirs(workspace_dir, exist_ok=True)
 
-    # 1. UI: Select a Project
+    # 1. UI: Select a Project (All 17 Projects Retained)
     projects = {
         "Chart (JFreeChart)": "Chart",
         "Cli (Apache Commons CLI)": "Cli",
@@ -120,7 +138,7 @@ def main():
     print(f"\n✅ All done! Successfully extracted {success_count}/{len(selected_bugs)} bugs to {workspace_dir}")
     print("\n========================================================")
     print("NEXT STEPS:")
-    print("1. Compile the buggy project (Ensure your terminal is running Java 11!):")
+    print("1. Compile the buggy project (Ensure your terminal is running Java 8!):")
     if selected_bugs:
         print(f"   cd ~/javelin-workspaces/Defects4J-{selected_project}-{selected_bugs[0]}-buggy")
     print("   defects4j compile")
